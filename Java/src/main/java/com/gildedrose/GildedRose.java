@@ -14,7 +14,7 @@ class GildedRose {
     public void updateQualityRefactored() {
         for (int i = 0; i < items.length; i++) {
             String itemName = items[i].name;
-            if (!itemName.equals(SULFURAS)) {
+            if (itemName!= null && !itemName.equals(SULFURAS)) {
                 boolean conjured = itemName.equals(CONJURED);
                 if (!conjured) {
                     boolean itemSpecial = itemName.equals(AGED_BRIE) || itemName.equals(PASSES);
@@ -91,6 +91,7 @@ class GildedRose {
     }
 
 
+    // This is the method I needed to refactor
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
             if (!items[i].name.equals("Aged Brie")
