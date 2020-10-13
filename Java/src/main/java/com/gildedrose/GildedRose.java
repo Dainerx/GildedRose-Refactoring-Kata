@@ -1,11 +1,95 @@
 package com.gildedrose;
 
 class GildedRose {
+    public static final String AGED_BRIE = "Aged Brie";
+    public static final String PASSES = "Backstage passes to a TAFKAL80ETC concert";
+    public static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
+    public static final String CONJURED = "Conjured";
     Item[] items;
 
     public GildedRose(Item[] items) {
         this.items = items;
     }
+
+    public void updateQualityRefactored() {
+        for (int i = 0; i < items.length; i++) {
+            String itemName = items[i].name;
+            if (!itemName.equals(SULFURAS)) {
+                boolean conjured = itemName.equals(CONJURED);
+                if (!conjured) {
+                    boolean itemSpecial = itemName.equals(AGED_BRIE) || itemName.equals(PASSES);
+                    if (!itemSpecial) {
+                        items[i] = updateNormal(items[i]);
+                    } else {
+                        items[i] = updateSpecial(items[i]);
+                    }
+                } else {
+                    items[i] = updateConjured(items[i]);
+                }
+            }
+        }
+    }
+
+    private Item updateNormal(Item normalItem) {
+        normalItem.quality = decrementAndGetQuality(normalItem.quality);
+        normalItem.sellIn--;
+
+        if (normalItem.sellIn < 0) {
+            normalItem.quality = decrementAndGetQuality(normalItem.quality);
+        }
+        return normalItem;
+    }
+
+    private Item updateSpecial(Item specialItem) {
+        specialItem.quality = incrementAndGetQuality(specialItem.quality);
+        specialItem.sellIn--;
+
+        switch (specialItem.name) {
+            case AGED_BRIE:
+                if (specialItem.sellIn < 0)
+                    specialItem.quality = incrementAndGetQuality(specialItem.quality);
+                break;
+            case PASSES:
+                if (specialItem.sellIn < 11)
+                    specialItem.quality = incrementAndGetQuality(specialItem.quality);
+                if (specialItem.sellIn < 6)
+                    specialItem.quality = incrementAndGetQuality(specialItem.quality);
+                if (specialItem.sellIn < 0)
+                    specialItem.quality = specialItem.quality - specialItem.quality;
+                break;
+            default:
+                System.out.println("[Warning] This should not happen");
+        }
+
+        return specialItem;
+    }
+
+
+    private Item updateConjured(Item conjuredItem) {
+        conjuredItem.quality = decrementAndGetQuality(conjuredItem.quality);
+        conjuredItem.quality = decrementAndGetQuality(conjuredItem.quality);
+        conjuredItem.sellIn--;
+
+        if (conjuredItem.sellIn < 0) {
+            conjuredItem.quality = decrementAndGetQuality(conjuredItem.quality);
+            conjuredItem.quality = decrementAndGetQuality(conjuredItem.quality);
+        }
+        return conjuredItem;
+    }
+
+
+    private int incrementAndGetQuality(int quality) {
+        if (quality < 50)
+            quality++;
+        return quality;
+    }
+
+    private int decrementAndGetQuality(int quality) {
+        if (quality > 0)
+            quality--;
+        return quality;
+    }
+
 
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
