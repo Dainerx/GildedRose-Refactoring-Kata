@@ -6,7 +6,7 @@ class GildedRose {
     static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
     static final String CONJURED = "Conjured";
 
-    public static final int DEADLINE = 0;
+    static final int DEADLINE = 0;
     static final int ZERO_QUALITY = 0;
     static final int MAX_QUALITY = 50;
 
