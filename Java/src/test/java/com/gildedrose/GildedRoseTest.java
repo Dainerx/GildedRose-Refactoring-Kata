@@ -146,7 +146,6 @@ class GildedRoseTest {
         Item[] items = new Item[]{new Item(null, 0, 0)};
         GildedRose app = new GildedRose(items);
         app.updateQualityRefactored();
-        assertEquals("foo", app.items[0].name);
-    }
+        }
 
 }

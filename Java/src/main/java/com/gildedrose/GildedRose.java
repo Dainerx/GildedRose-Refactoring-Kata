@@ -1,10 +1,15 @@
 package com.gildedrose;
 
 class GildedRose {
-    public static final String AGED_BRIE = "Aged Brie";
-    public static final String PASSES = "Backstage passes to a TAFKAL80ETC concert";
-    public static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
-    public static final String CONJURED = "Conjured";
+    static final String AGED_BRIE = "Aged Brie";
+    static final String PASSES = "Backstage passes to a TAFKAL80ETC concert";
+    static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
+    static final String CONJURED = "Conjured";
+
+    public static final int DEADLINE = 0;
+    static final int ZERO_QUALITY = 0;
+    static final int MAX_QUALITY = 50;
+
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -14,7 +19,7 @@ class GildedRose {
     public void updateQualityRefactored() {
         for (int i = 0; i < items.length; i++) {
             String itemName = items[i].name;
-            if (itemName!= null && !itemName.equals(SULFURAS)) {
+            if (itemName != null && !itemName.equals(SULFURAS)) {
                 boolean conjured = itemName.equals(CONJURED);
                 if (!conjured) {
                     boolean itemSpecial = itemName.equals(AGED_BRIE) || itemName.equals(PASSES);
@@ -34,7 +39,7 @@ class GildedRose {
         normalItem.quality = decrementAndGetQuality(normalItem.quality);
         normalItem.sellIn--;
 
-        if (normalItem.sellIn < 0) {
+        if (normalItem.sellIn < DEADLINE) {
             normalItem.quality = decrementAndGetQuality(normalItem.quality);
         }
         return normalItem;
@@ -46,7 +51,7 @@ class GildedRose {
 
         switch (specialItem.name) {
             case AGED_BRIE:
-                if (specialItem.sellIn < 0)
+                if (specialItem.sellIn < DEADLINE)
                     specialItem.quality = incrementAndGetQuality(specialItem.quality);
                 break;
             case PASSES:
@@ -54,7 +59,7 @@ class GildedRose {
                     specialItem.quality = incrementAndGetQuality(specialItem.quality);
                 if (specialItem.sellIn < 6)
                     specialItem.quality = incrementAndGetQuality(specialItem.quality);
-                if (specialItem.sellIn < 0)
+                if (specialItem.sellIn < DEADLINE)
                     specialItem.quality = specialItem.quality - specialItem.quality;
                 break;
             default:
@@ -70,7 +75,7 @@ class GildedRose {
         conjuredItem.quality = decrementAndGetQuality(conjuredItem.quality);
         conjuredItem.sellIn--;
 
-        if (conjuredItem.sellIn < 0) {
+        if (conjuredItem.sellIn < DEADLINE) {
             conjuredItem.quality = decrementAndGetQuality(conjuredItem.quality);
             conjuredItem.quality = decrementAndGetQuality(conjuredItem.quality);
         }
@@ -79,13 +84,13 @@ class GildedRose {
 
 
     private int incrementAndGetQuality(int quality) {
-        if (quality < 50)
+        if (quality < MAX_QUALITY)
             quality++;
         return quality;
     }
 
     private int decrementAndGetQuality(int quality) {
-        if (quality > 0)
+        if (quality > ZERO_QUALITY)
             quality--;
         return quality;
     }
